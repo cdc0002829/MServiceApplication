@@ -23,21 +23,7 @@ public class MyService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        NotificationManager manager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification.Builder builder = new Notification.Builder(MyService.this);
-        PendingIntent contentIntent = PendingIntent.getActivities(MyService.this, 0,
-                new Intent[]{new Intent(MyService.this, MainActivity.class)}, PendingIntent.FLAG_CANCEL_CURRENT);
-        builder.setContentIntent(contentIntent)
-                .setSmallIcon(R.mipmap.ic_launcher)         //设置状态栏里面的图标（小图标）
- .setTicker("This is bitch.")                //设置状态栏的显示的信息
-                .setWhen(System.currentTimeMillis())        //设置时间发生时间
-                .setAutoCancel(true)                        //设置可以清除
-                .setContentTitle("This is ContentTitle")    //设置下拉列表里的标题
-                .setContentText("This is ContentText");     //设置上下文内容
-        Notification notification = builder.getNotification();
-        manager.notify(1, notification);
-        Notification notification = builder.geNotification();
+     
     }
 
     @Override
