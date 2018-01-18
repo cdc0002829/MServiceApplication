@@ -1,6 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            storeFile
+            storePassword
+            keyAlias
+            keyPassword
+        }
+    }
+    //调用配置文件
+    getSigningProperties()
     compileSdkVersion 25
     buildToolsVersion "26.0.0"
     defaultConfig {
@@ -15,7 +25,35 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    output.outputFile = new File(
+                            output.outputFile.parent,
+                            "aa.apk".toLowerCase())
+                }
+            }
         }
+    }
+}
+
+def getSigningProperties(){
+    def propFile = file('signing.properties')
+    if (propFile.canRead()){
+        def Properties props = new Properties()
+        props.load(new FileInputStream(propFile))
+        if (props!=null && props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+            android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+            android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+            android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+            android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+        } else {
+            println 'signing.properties found but some entries are missing'
+            android.buildTypes.release.signingConfig = null
+        }
+    }else {
+        println 'signing.properties not found'
+        android.buildTypes.release.signingConfig = null
     }
 }
 
