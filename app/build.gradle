@@ -30,7 +30,7 @@ android {
                 variant.outputs.each { output ->
                     output.outputFile = new File(
                             output.outputFile.parent,
-                            "aa.apk".toLowerCase())
+                            "bbbbbbbbb.apk".toLowerCase())
                 }
             }
         }
